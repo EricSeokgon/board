@@ -4,16 +4,18 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board extends TimeEntity {
+@EntityListeners(AuditingEntityListener.class)
+public class Board {
 
     @Id
     @GeneratedValue
@@ -25,6 +27,11 @@ public class Board extends TimeEntity {
     private String title;
     @Column(columnDefinition = "TEXT", nullable=false)
     private String content;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdDate;
+    @LastModifiedDate
+    private LocalDateTime modifiedDate;
 
     @Builder
     public Board(Long id, String writer, String title, String content) {
